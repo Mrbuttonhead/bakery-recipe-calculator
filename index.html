@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥖 Bakery Recipe Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --accent-color: #d97706;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-card: #242424;
+            --text-primary: #f8f9fa;
+            --text-secondary: #adb5bd;
+            --border-color: #404040;
+            --accent-color: #fbbf24;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .controls {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .unit-toggle {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 16px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: normal;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        input[type="radio"] {
+            margin-right: 6px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-color);
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quantity-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: bold;
+        }
+
+        .quantity-btn:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        .quantity-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .ingredients-section {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .ingredient-category {
+            margin-bottom: 24px;
+        }
+
+        .ingredient-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .category-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .ingredient-list {
+            list-style: none;
+        }
+
+        .ingredient-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ingredient-item:last-child {
+            border-bottom: none;
+        }
+
+        .ingredient-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .ingredient-amount {
+            font-weight: 700;
+            color: var(--accent-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        .total-section {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 3px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .total-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🥖 Bakery Recipe Calculator</h1>
+            <button class="theme-toggle" id="themeToggle">🌙</button>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="recipeSelect">Recipe</label>
+                <select id="recipeSelect">
+                    <option value="Country Loaf">Country Loaf</option>
+                    <option value="Chocolate Brownies">Chocolate Brownies</option>
+                    <option value="Sourdough Baguette">Sourdough Baguette</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Units</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="unit" value="grams" checked>
+                        Grams (g)
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="unit" value="lbs">
+                        Pounds (lbs)
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Quantity (Batches)</label>
+                <div class="quantity-control">
+                    <button class="quantity-btn" id="decreaseBtn">−</button>
+                    <input type="number" class="quantity-input" id="quantityInput" value="1" min="0.25" step="0.25">
+                    <button class="quantity-btn" id="increaseBtn">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ingredients-section" id="ingredientsSection">
+            <!-- Ingredients will be dynamically generated here -->
+        </div>
+    </div>
+
+    <script>
+        // Recipe Data
+        const recipes = {
+            "Country Loaf": [
+                { name: "Bread Flour", base: 338, wet: false },
+                { name: "AP Flour", base: 68, wet: false },
+                { name: "Spelt Flour", base: 45, wet: false },
+                { name: "Einkorn Flour", base: 13, wet: false },
+                { name: "Salt", base: 15, wet: false },
+                { name: "Water", base: 330, wet: true },
+                { name: "Starter", base: 100, wet: true }
+            ],
+            "Chocolate Brownies": [
+                { name: "AP Flour", base: 200, wet: false },
+                { name: "Cocoa Powder", base: 50, wet: false },
+                { name: "Sugar", base: 300, wet: false },
+                { name: "Baking Powder", base: 5, wet: false },
+                { name: "Salt", base: 3, wet: false },
+                { name: "Butter", base: 200, wet: true },
+                { name: "Eggs", base: 150, wet: true },
+                { name: "Vanilla Extract", base: 10, wet: true }
+            ],
+            "Sourdough Baguette": [
+                { name: "Bread Flour", base: 500, wet: false },
+                { name: "Whole Wheat Flour", base: 50, wet: false },
+                { name: "Salt", base: 12, wet: false },
+                { name: "Water", base: 375, wet: true },
+                { name: "Starter", base: 110, wet: true }
+            ]
+        };
+
+        // State
+        let currentRecipe = "Country Loaf";
+        let currentQuantity = 1;
+        let currentUnit = "grams";
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // Elements
+        const recipeSelect = document.getElementById('recipeSelect');
+        const quantityInput = document.getElementById('quantityInput');
+        const increaseBtn = document.getElementById('increaseBtn');
+        const decreaseBtn = document.getElementById('decreaseBtn');
+        const ingredientsSection = document.getElementById('ingredientsSection');
+        const themeToggle = document.getElementById('themeToggle');
+        const unitRadios = document.querySelectorAll('input[name="unit"]');
+
+        // Initialize theme
+        if (isDarkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.textContent = '☀️';
+        }
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        // Recipe Selection
+        recipeSelect.addEventListener('change', (e) => {
+            currentRecipe = e.target.value;
+            renderIngredients();
+        });
+
+        // Unit Toggle
+        unitRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                currentUnit = e.target.value;
+                renderIngredients();
+            });
+        });
+
+        // Quantity Controls
+        quantityInput.addEventListener('input', (e) => {
+            currentQuantity = parseFloat(e.target.value) || 0;
+            renderIngredients();
+        });
+
+        increaseBtn.addEventListener('click', () => {
+            currentQuantity += 0.25;
+            quantityInput.value = currentQuantity.toFixed(2);
+            renderIngredients();
+        });
+
+        decreaseBtn.addEventListener('click', () => {
+            if (currentQuantity > 0.25) {
+                currentQuantity -= 0.25;
+                quantityInput.value = currentQuantity.toFixed(2);
+                renderIngredients();
+            }
+        });
+
+        // Convert grams to pounds
+        function gramsToLbs(grams) {
+            return grams / 453.592;
+        }
+
+        // Format number based on unit
+        function formatAmount(grams) {
+            if (currentUnit === 'lbs') {
+                const lbs = gramsToLbs(grams);
+                return `${lbs.toFixed(3)} lbs`;
+            }
+            return `${Math.round(grams)} g`;
+        }
+
+        // Render Ingredients
+        function renderIngredients() {
+            const recipe = recipes[currentRecipe];
+            const dryIngredients = recipe.filter(ing => !ing.wet);
+            const wetIngredients = recipe.filter(ing => ing.wet);
+
+            let html = '';
+
+            // Dry Ingredients
+            if (dryIngredients.length > 0) {
+                html += '<div class="ingredient-category">';
+                html += '<div class="category-title">Dry Ingredients</div>';
+                html += '<ul class="ingredient-list">';
+                dryIngredients.forEach(ing => {
+                    const amount = ing.base * currentQuantity;
+                    html += `
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">${ing.name}</span>
+                            <span class="ingredient-amount">${formatAmount(amount)}</span>
+                        </li>
+                    `;
+                });
+                html += '</ul></div>';
+            }
+
+            // Wet Ingredients
+            if (wetIngredients.length > 0) {
+                html += '<div class="ingredient-category">';
+                html += '<div class="category-title">Wet Ingredients</div>';
+                html += '<ul class="ingredient-list">';
+                wetIngredients.forEach(ing => {
+                    const amount = ing.base * currentQuantity;
+                    html += `
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">${ing.name}</span>
+                            <span class="ingredient-amount">${formatAmount(amount)}</span>
+                        </li>
+                    `;
+                });
+                html += '</ul></div>';
+            }
+
+            // Total
+            const total = recipe.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
+            html += `
+                <div class="total-section">
+                    <span class="total-label">TOTAL</span>
+                    <span class="total-amount">${formatAmount(total)}</span>
+                </div>
+            `;
+
+            ingredientsSection.innerHTML = html;
+        }
+
+        // Initial Render
+        renderIngredients();
+    </script>
+</body>
+</html>
