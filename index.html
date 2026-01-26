@@ -425,7 +425,7 @@
         function formatAmount(grams) {
             if (currentUnit === 'lbs') {
                 const lbs = gramsToLbs(grams);
-                return `${lbs.toFixed(3)} lbs`;
+                return `${Math.round(lbs)} lbs`;
             }
             return `${Math.round(grams)} g`;
         }
