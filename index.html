@@ -494,6 +494,15 @@
             return `${Math.round(grams)} g`;
         }
 
+        // Get selected inclusion for current recipe
+        function getSelectedInclusion() {
+            if (currentInclusion === "none") {
+                return null;
+            }
+            const availableInclusions = inclusions[currentRecipe] || [];
+            return availableInclusions.find(inc => inc.name === currentInclusion);
+        }
+
         // Render Ingredients
         function renderIngredients() {
             const recipe = recipes[currentRecipe];
@@ -537,37 +546,29 @@
             }
 
             // Inclusions (if selected)
-            if (currentInclusion !== "none") {
-                const availableInclusions = inclusions[currentRecipe] || [];
-                const selectedInclusion = availableInclusions.find(inc => inc.name === currentInclusion);
-                
-                if (selectedInclusion) {
-                    html += '<div class="ingredient-category">';
-                    html += '<div class="category-title">Inclusions</div>';
-                    html += '<ul class="ingredient-list">';
-                    selectedInclusion.ingredients.forEach(ing => {
-                        const amount = ing.base * currentQuantity;
-                        html += `
-                            <li class="ingredient-item">
-                                <span class="ingredient-name">${ing.name}</span>
-                                <span class="ingredient-amount">${formatAmount(amount)}</span>
-                            </li>
-                        `;
-                    });
-                    html += '</ul></div>';
-                }
+            const selectedInclusion = getSelectedInclusion();
+            if (selectedInclusion) {
+                html += '<div class="ingredient-category">';
+                html += '<div class="category-title">INCLUSIONS</div>';
+                html += '<ul class="ingredient-list">';
+                selectedInclusion.ingredients.forEach(ing => {
+                    const amount = ing.base * currentQuantity;
+                    html += `
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">${ing.name}</span>
+                            <span class="ingredient-amount">${formatAmount(amount)}</span>
+                        </li>
+                    `;
+                });
+                html += '</ul></div>';
             }
 
             // Total
             let total = recipe.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
             
             // Add inclusions to total
-            if (currentInclusion !== "none") {
-                const availableInclusions = inclusions[currentRecipe] || [];
-                const selectedInclusion = availableInclusions.find(inc => inc.name === currentInclusion);
-                if (selectedInclusion) {
-                    total += selectedInclusion.ingredients.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
-                }
+            if (selectedInclusion) {
+                total += selectedInclusion.ingredients.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
             }
             
             html += `
