@@ -311,7 +311,7 @@
                 <label>Quantity (Batches)</label>
                 <div class="quantity-control">
                     <button class="quantity-btn" id="decreaseBtn">−</button>
-                    <input type="number" class="quantity-input" id="quantityInput" value="1" min="0.25" step="0.25">
+                    <input type="number" class="quantity-input" id="quantityInput" value="1" min="1" step="1">
                     <button class="quantity-btn" id="increaseBtn">+</button>
                 </div>
             </div>
@@ -403,15 +403,15 @@
         });
 
         increaseBtn.addEventListener('click', () => {
-            currentQuantity += 0.25;
-            quantityInput.value = currentQuantity.toFixed(2);
+            currentQuantity += 1;
+            quantityInput.value = currentQuantity;
             renderIngredients();
         });
 
         decreaseBtn.addEventListener('click', () => {
-            if (currentQuantity > 0.25) {
-                currentQuantity -= 0.25;
-                quantityInput.value = currentQuantity.toFixed(2);
+            if (currentQuantity > 1) {
+                currentQuantity -= 1;
+                quantityInput.value = currentQuantity;
                 renderIngredients();
             }
         });
@@ -425,7 +425,7 @@
         function formatAmount(grams) {
             if (currentUnit === 'lbs') {
                 const lbs = gramsToLbs(grams);
-                return `${lbs.toFixed(3)} lbs`;
+                return `${Math.round(lbs)} lbs`;
             }
             return `${Math.round(grams)} g`;
         }
