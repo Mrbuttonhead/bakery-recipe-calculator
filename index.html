@@ -293,6 +293,13 @@
                 </select>
             </div>
 
+            <div class="control-group" id="inclusionControl">
+                <label for="inclusionSelect">Inclusions (Optional)</label>
+                <select id="inclusionSelect">
+                    <option value="none">None</option>
+                </select>
+            </div>
+
             <div class="control-group">
                 <label>Units</label>
                 <div class="radio-group">
@@ -353,14 +360,44 @@
             ]
         };
 
+        // Inclusions Data - organized by base recipe
+        const inclusions = {
+            "Country Loaf": [
+                { 
+                    name: "Cranberry Walnut", 
+                    ingredients: [
+                        { name: "Dried Cranberries", base: 100, wet: false },
+                        { name: "Walnuts", base: 100, wet: false }
+                    ]
+                },
+                { 
+                    name: "Cinnamon Raisin", 
+                    ingredients: [
+                        { name: "Raisins", base: 150, wet: false },
+                        { name: "Cinnamon", base: 8, wet: false }
+                    ]
+                },
+                { 
+                    name: "Olive", 
+                    ingredients: [
+                        { name: "Olives (chopped)", base: 120, wet: false }
+                    ]
+                }
+            ],
+            "Chocolate Brownies": [],
+            "Sourdough Baguette": []
+        };
+
         // State
         let currentRecipe = "Country Loaf";
         let currentQuantity = 1;
         let currentUnit = "grams";
+        let currentInclusion = "none";
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
 
         // Elements
         const recipeSelect = document.getElementById('recipeSelect');
+        const inclusionSelect = document.getElementById('inclusionSelect');
         const quantityInput = document.getElementById('quantityInput');
         const increaseBtn = document.getElementById('increaseBtn');
         const decreaseBtn = document.getElementById('decreaseBtn');
@@ -385,6 +422,33 @@
         // Recipe Selection
         recipeSelect.addEventListener('change', (e) => {
             currentRecipe = e.target.value;
+            currentInclusion = "none";
+            populateInclusionOptions();
+            renderIngredients();
+        });
+
+        // Populate inclusion dropdown based on selected recipe
+        function populateInclusionOptions() {
+            const availableInclusions = inclusions[currentRecipe] || [];
+            
+            // Clear existing options
+            inclusionSelect.innerHTML = '<option value="none">None</option>';
+            
+            // Add inclusions for current recipe
+            availableInclusions.forEach(inclusion => {
+                const option = document.createElement('option');
+                option.value = inclusion.name;
+                option.textContent = inclusion.name;
+                inclusionSelect.appendChild(option);
+            });
+            
+            // Reset selection
+            inclusionSelect.value = "none";
+        }
+
+        // Inclusion Selection
+        inclusionSelect.addEventListener('change', (e) => {
+            currentInclusion = e.target.value;
             renderIngredients();
         });
 
@@ -425,7 +489,7 @@
         function formatAmount(grams) {
             if (currentUnit === 'lbs') {
                 const lbs = gramsToLbs(grams);
-                return `${Math.round(lbs)} lbs`;
+                return `${lbs.toFixed(2)} lbs`;
             }
             return `${Math.round(grams)} g`;
         }
@@ -472,8 +536,40 @@
                 html += '</ul></div>';
             }
 
+            // Inclusions (if selected)
+            if (currentInclusion !== "none") {
+                const availableInclusions = inclusions[currentRecipe] || [];
+                const selectedInclusion = availableInclusions.find(inc => inc.name === currentInclusion);
+                
+                if (selectedInclusion) {
+                    html += '<div class="ingredient-category">';
+                    html += '<div class="category-title">Inclusions</div>';
+                    html += '<ul class="ingredient-list">';
+                    selectedInclusion.ingredients.forEach(ing => {
+                        const amount = ing.base * currentQuantity;
+                        html += `
+                            <li class="ingredient-item">
+                                <span class="ingredient-name">${ing.name}</span>
+                                <span class="ingredient-amount">${formatAmount(amount)}</span>
+                            </li>
+                        `;
+                    });
+                    html += '</ul></div>';
+                }
+            }
+
             // Total
-            const total = recipe.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
+            let total = recipe.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
+            
+            // Add inclusions to total
+            if (currentInclusion !== "none") {
+                const availableInclusions = inclusions[currentRecipe] || [];
+                const selectedInclusion = availableInclusions.find(inc => inc.name === currentInclusion);
+                if (selectedInclusion) {
+                    total += selectedInclusion.ingredients.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
+                }
+            }
+            
             html += `
                 <div class="total-section">
                     <span class="total-label">TOTAL</span>
@@ -485,6 +581,7 @@
         }
 
         // Initial Render
+        populateInclusionOptions();
         renderIngredients();
     </script>
 </body>
