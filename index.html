@@ -254,10 +254,25 @@
             align-items: center;
         }
 
+        .total-flour-section {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .total-label {
             font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
+        }
+
+        .total-flour-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
         }
 
         .total-amount {
@@ -265,6 +280,180 @@
             font-weight: 700;
             color: var(--accent-color);
             font-family: 'Courier New', monospace;
+        }
+
+        .total-flour-amount {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .experiment-section {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-top: 24px;
+        }
+
+        .experiment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .experiment-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .experiment-toggle {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .experiment-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .experiment-controls {
+            display: none;
+        }
+
+        .experiment-controls.active {
+            display: block;
+        }
+
+        .experiment-input-group {
+            margin-bottom: 16px;
+        }
+
+        .experiment-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .experiment-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        textarea.experiment-input {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .experiment-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .experiment-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .save-experiment-btn {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .save-experiment-btn:hover {
+            opacity: 0.8;
+        }
+
+        .clear-experiments-btn {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .clear-experiments-btn:hover {
+            background: var(--border-color);
+        }
+
+        .experiments-list {
+            margin-top: 20px;
+        }
+
+        .experiment-item {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .experiment-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 8px;
+        }
+
+        .experiment-item-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .experiment-item-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .experiment-item-delete {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .experiment-item-delete:hover {
+            color: #dc3545;
+        }
+
+        .experiment-item-details {
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .experiment-item-notes {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-color);
         }
 
         @media (max-width: 640px) {
@@ -326,6 +515,30 @@
 
         <div class="ingredients-section" id="ingredientsSection">
             <!-- Ingredients will be dynamically generated here -->
+        </div>
+
+        <div class="experiment-section">
+            <div class="experiment-header">
+                <div class="experiment-title">🧪 Recipe Experiments</div>
+                <button class="experiment-toggle" id="experimentToggle">Start Experiment</button>
+            </div>
+            <div class="experiment-controls" id="experimentControls">
+                <div class="experiment-input-group">
+                    <label>Experiment Name</label>
+                    <input type="text" class="experiment-input" id="experimentName" placeholder="e.g., Extra Flour Test #1">
+                </div>
+                <div class="experiment-input-group">
+                    <label>Notes</label>
+                    <textarea class="experiment-input" id="experimentNotes" placeholder="Describe your changes, adjustments, and observations..."></textarea>
+                </div>
+                <div class="experiment-buttons">
+                    <button class="experiment-btn save-experiment-btn" id="saveExperiment">💾 Save Experiment</button>
+                    <button class="experiment-btn clear-experiments-btn" id="clearExperiments">🗑️ Clear All</button>
+                </div>
+            </div>
+            <div class="experiments-list" id="experimentsList">
+                <!-- Saved experiments will appear here -->
+            </div>
         </div>
     </div>
 
@@ -394,6 +607,8 @@
         let currentUnit = "grams";
         let currentInclusion = "none";
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let experiments = JSON.parse(localStorage.getItem('experiments') || '[]');
+        let isExperimentMode = false;
 
         // Elements
         const recipeSelect = document.getElementById('recipeSelect');
@@ -404,6 +619,13 @@
         const ingredientsSection = document.getElementById('ingredientsSection');
         const themeToggle = document.getElementById('themeToggle');
         const unitRadios = document.querySelectorAll('input[name="unit"]');
+        const experimentToggle = document.getElementById('experimentToggle');
+        const experimentControls = document.getElementById('experimentControls');
+        const experimentName = document.getElementById('experimentName');
+        const experimentNotes = document.getElementById('experimentNotes');
+        const saveExperiment = document.getElementById('saveExperiment');
+        const clearExperiments = document.getElementById('clearExperiments');
+        const experimentsList = document.getElementById('experimentsList');
 
         // Initialize theme
         if (isDarkMode) {
@@ -503,6 +725,18 @@
             return availableInclusions.find(inc => inc.name === currentInclusion);
         }
 
+        // Calculate total flour amount
+        function calculateTotalFlour() {
+            const recipe = recipes[currentRecipe];
+            const flourIngredients = recipe.filter(ing => 
+                ing.name.toLowerCase().includes('flour') && !ing.wet
+            );
+            
+            let totalFlour = flourIngredients.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
+            
+            return totalFlour;
+        }
+
         // Render Ingredients
         function renderIngredients() {
             const recipe = recipes[currentRecipe];
@@ -571,9 +805,20 @@
                 total += selectedInclusion.ingredients.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0);
             }
             
+            // Calculate total flour
+            const totalFlour = calculateTotalFlour();
+            
+            // Add total flour section
+            html += `
+                <div class="total-flour-section">
+                    <span class="total-flour-label">Total Flour</span>
+                    <span class="total-flour-amount">${formatAmount(totalFlour)}</span>
+                </div>
+            `;
+            
             html += `
                 <div class="total-section">
-                    <span class="total-label">TOTAL</span>
+                    <span class="total-label">TOTAL DOUGH WEIGHT</span>
                     <span class="total-amount">${formatAmount(total)}</span>
                 </div>
             `;
@@ -581,9 +826,124 @@
             ingredientsSection.innerHTML = html;
         }
 
+        // Experiment Mode Functions
+        experimentToggle.addEventListener('click', () => {
+            isExperimentMode = !isExperimentMode;
+            experimentControls.classList.toggle('active');
+            experimentToggle.textContent = isExperimentMode ? 'Close Experiment' : 'Start Experiment';
+        });
+
+        saveExperiment.addEventListener('click', () => {
+            const name = experimentName.value.trim();
+            const notes = experimentNotes.value.trim();
+            
+            if (!name) {
+                alert('Please enter an experiment name');
+                return;
+            }
+
+            const recipe = recipes[currentRecipe];
+            const selectedInclusion = getSelectedInclusion();
+            
+            // Capture current state
+            const experiment = {
+                id: Date.now(),
+                name: name,
+                notes: notes,
+                recipe: currentRecipe,
+                quantity: currentQuantity,
+                unit: currentUnit,
+                inclusion: currentInclusion,
+                timestamp: new Date().toISOString(),
+                ingredients: recipe.map(ing => ({
+                    name: ing.name,
+                    amount: ing.base * currentQuantity,
+                    wet: ing.wet
+                })),
+                totalFlour: calculateTotalFlour(),
+                totalWeight: recipe.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0) +
+                    (selectedInclusion ? selectedInclusion.ingredients.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0) : 0)
+            };
+
+            if (selectedInclusion) {
+                experiment.inclusionIngredients = selectedInclusion.ingredients.map(ing => ({
+                    name: ing.name,
+                    amount: ing.base * currentQuantity
+                }));
+            }
+
+            experiments.push(experiment);
+            localStorage.setItem('experiments', JSON.stringify(experiments));
+            
+            // Clear inputs
+            experimentName.value = '';
+            experimentNotes.value = '';
+            
+            // Render experiments
+            renderExperiments();
+            
+            alert('Experiment saved! 🎉');
+        });
+
+        clearExperiments.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear all experiments?')) {
+                experiments = [];
+                localStorage.setItem('experiments', JSON.stringify(experiments));
+                renderExperiments();
+            }
+        });
+
+        function renderExperiments() {
+            if (experiments.length === 0) {
+                experimentsList.innerHTML = '';
+                return;
+            }
+
+            let html = experiments.map(exp => {
+                const date = new Date(exp.timestamp);
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <div class="experiment-item">
+                        <div class="experiment-item-header">
+                            <div>
+                                <div class="experiment-item-title">${exp.name}</div>
+                                <div class="experiment-item-date">${dateStr}</div>
+                            </div>
+                            <button class="experiment-item-delete" onclick="deleteExperiment(${exp.id})">✕</button>
+                        </div>
+                        <div class="experiment-item-details">
+                            <strong>Recipe:</strong> ${exp.recipe} (${exp.quantity} batch${exp.quantity > 1 ? 'es' : ''})<br>
+                            ${exp.inclusion !== 'none' ? `<strong>Inclusion:</strong> ${exp.inclusion}<br>` : ''}
+                            <strong>Total Flour:</strong> ${formatAmountFromValue(exp.totalFlour, exp.unit)}<br>
+                            <strong>Total Weight:</strong> ${formatAmountFromValue(exp.totalWeight, exp.unit)}
+                        </div>
+                        ${exp.notes ? `<div class="experiment-item-notes">Notes: ${exp.notes}</div>` : ''}
+                    </div>
+                `;
+            }).reverse().join('');
+
+            experimentsList.innerHTML = html;
+        }
+
+        function deleteExperiment(id) {
+            experiments = experiments.filter(exp => exp.id !== id);
+            localStorage.setItem('experiments', JSON.stringify(experiments));
+            renderExperiments();
+        }
+
+        function formatAmountFromValue(grams, unit) {
+            if (unit === 'lbs') {
+                const lbs = gramsToLbs(grams);
+                return `${lbs.toFixed(2)} lbs`;
+            }
+            return `${Math.round(grams)} g`;
+        }
+
         // Initial Render
         populateInclusionOptions();
         renderIngredients();
+        renderExperiments();
     </script>
 </body>
 </html>
