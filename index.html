@@ -606,7 +606,7 @@
         let currentQuantity = 1;
         let currentUnit = "grams";
         let currentInclusion = "none";
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let isDarkMode = localStorage.getItem('darkMode') !== 'false';
         let experiments = JSON.parse(localStorage.getItem('experiments') || '[]');
         let isExperimentMode = false;
 
