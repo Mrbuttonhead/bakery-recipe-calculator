@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🥖 Bakery Recipe Calculator</title>
+    <title>Recipe Calculator</title>
     <style>
         * {
             margin: 0;
@@ -19,6 +19,7 @@
             --text-secondary: #6c757d;
             --border-color: #dee2e6;
             --accent-color: #d97706;
+            --brand-brown: #4c2400;
             --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
         }
@@ -31,6 +32,7 @@
             --text-secondary: #adb5bd;
             --border-color: #404040;
             --accent-color: #fbbf24;
+            --brand-brown: #f8f9fa;
             --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
@@ -60,9 +62,19 @@
             border: 1px solid var(--border-color);
         }
 
+        .logo {
+            width: 140px;
+            height: auto;
+            display: block;
+        }
+
+        [data-theme="dark"] .logo {
+            filter: brightness(0) invert(1);
+        }
+
         .header h1 {
             font-size: 24px;
-            color: var(--text-primary);
+            color: var(--brand-brown);
         }
 
         .theme-toggle {
@@ -226,12 +238,31 @@
         .ingredient-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 10px 8px;
             border-bottom: 1px solid var(--border-color);
+        }
+
+        .ingredient-item:nth-child(odd) {
+            background: var(--bg-secondary);
+            border-radius: 6px;
         }
 
         .ingredient-item:last-child {
             border-bottom: none;
+        }
+
+        .recipe-note {
+            margin: 12px 0 4px;
+            padding: 10px 12px;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .recipe-note.hidden {
+            display: none;
         }
 
         .ingredient-name {
@@ -289,172 +320,6 @@
             font-family: 'Courier New', monospace;
         }
 
-        .experiment-section {
-            background: var(--bg-card);
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            margin-top: 24px;
-        }
-
-        .experiment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .experiment-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .experiment-toggle {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .experiment-toggle:hover {
-            opacity: 0.8;
-        }
-
-        .experiment-controls {
-            display: none;
-        }
-
-        .experiment-controls.active {
-            display: block;
-        }
-
-        .experiment-input-group {
-            margin-bottom: 16px;
-        }
-
-        .experiment-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 14px;
-            font-family: inherit;
-        }
-
-        .experiment-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        textarea.experiment-input {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .experiment-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .experiment-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .save-experiment-btn {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .save-experiment-btn:hover {
-            opacity: 0.8;
-        }
-
-        .clear-experiments-btn {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 2px solid var(--border-color);
-        }
-
-        .clear-experiments-btn:hover {
-            background: var(--border-color);
-        }
-
-        .experiments-list {
-            margin-top: 20px;
-        }
-
-        .experiment-item {
-            background: var(--bg-secondary);
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .experiment-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 8px;
-        }
-
-        .experiment-item-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .experiment-item-date {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .experiment-item-delete {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 18px;
-            padding: 0;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .experiment-item-delete:hover {
-            color: #dc3545;
-        }
-
-        .experiment-item-details {
-            font-size: 14px;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .experiment-item-notes {
-            font-size: 14px;
-            color: var(--text-secondary);
-            font-style: italic;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid var(--border-color);
-        }
 
         @media (max-width: 640px) {
             .header {
@@ -468,7 +333,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🥖 Bakery Recipe Calculator</h1>
+            <div>
+                <img class="logo" src="MichaelBakesBrown@3x.png" alt="Michael Bakes logo">
+                <h1>Recipe Calculator</h1>
+            </div>
             <button class="theme-toggle" id="themeToggle">🌙</button>
         </div>
 
@@ -478,7 +346,8 @@
                 <select id="recipeSelect">
                     <option value="Country Loaf">Country Loaf</option>
                     <option value="Chocolate Brownies">Chocolate Brownies</option>
-                    <option value="Sourdough Baguette">Sourdough Baguette</option>
+                    <option value="Focaccia">Focaccia</option>
+                    <option value="Seeded">Seeded</option>
                 </select>
             </div>
 
@@ -497,6 +366,10 @@
                         Grams (g)
                     </label>
                     <label class="radio-label">
+                        <input type="radio" name="unit" value="kg">
+                        Kilograms (kg)
+                    </label>
+                    <label class="radio-label">
                         <input type="radio" name="unit" value="lbs">
                         Pounds (lbs)
                     </label>
@@ -510,6 +383,7 @@
                     <input type="number" class="quantity-input" id="quantityInput" value="1" min="1" step="1">
                     <button class="quantity-btn" id="increaseBtn">+</button>
                 </div>
+                <div class="recipe-note hidden" id="recipeNote"></div>
             </div>
         </div>
 
@@ -517,29 +391,6 @@
             <!-- Ingredients will be dynamically generated here -->
         </div>
 
-        <div class="experiment-section">
-            <div class="experiment-header">
-                <div class="experiment-title">🧪 Recipe Experiments</div>
-                <button class="experiment-toggle" id="experimentToggle">Start Experiment</button>
-            </div>
-            <div class="experiment-controls" id="experimentControls">
-                <div class="experiment-input-group">
-                    <label>Experiment Name</label>
-                    <input type="text" class="experiment-input" id="experimentName" placeholder="e.g., Extra Flour Test #1">
-                </div>
-                <div class="experiment-input-group">
-                    <label>Notes</label>
-                    <textarea class="experiment-input" id="experimentNotes" placeholder="Describe your changes, adjustments, and observations..."></textarea>
-                </div>
-                <div class="experiment-buttons">
-                    <button class="experiment-btn save-experiment-btn" id="saveExperiment">💾 Save Experiment</button>
-                    <button class="experiment-btn clear-experiments-btn" id="clearExperiments">🗑️ Clear All</button>
-                </div>
-            </div>
-            <div class="experiments-list" id="experimentsList">
-                <!-- Saved experiments will appear here -->
-            </div>
-        </div>
     </div>
 
     <script>
@@ -550,26 +401,43 @@
                 { name: "AP Flour", base: 68, wet: false },
                 { name: "Spelt Flour", base: 45, wet: false },
                 { name: "Einkorn Flour", base: 13, wet: false },
+                { name: "Rye Flour", base: 15, wet: false },
+                { name: "Whole Wheat Flour", base: 10, wet: false },
                 { name: "Salt", base: 15, wet: false },
                 { name: "Water", base: 330, wet: true },
                 { name: "Starter", base: 100, wet: true }
             ],
             "Chocolate Brownies": [
-                { name: "AP Flour", base: 200, wet: false },
-                { name: "Cocoa Powder", base: 50, wet: false },
-                { name: "Sugar", base: 300, wet: false },
-                { name: "Baking Powder", base: 5, wet: false },
-                { name: "Salt", base: 3, wet: false },
-                { name: "Butter", base: 200, wet: true },
-                { name: "Eggs", base: 150, wet: true },
-                { name: "Vanilla Extract", base: 10, wet: true }
+                { name: "AP Flour", base: 450, wet: false },
+                { name: "Brown Sugar", base: 675, wet: false },
+                { name: "Sucanat Sugar", base: 675, wet: false },
+                { name: "Dark Chocolate (Callebaut)", base: 450, wet: false },
+                { name: "Cocoa Powder", base: 270, wet: false },
+                { name: "Baking Powder", base: 18, wet: false },
+                { name: "Salt", base: 18, wet: false },
+                { name: "Eggs", base: 450, wet: true },
+                { name: "Vanilla Extract", base: 18, wet: true },
+                { name: "Unsalted Butter", base: 519, wet: true }
             ],
-            "Sourdough Baguette": [
-                { name: "Bread Flour", base: 500, wet: false },
-                { name: "Whole Wheat Flour", base: 50, wet: false },
-                { name: "Salt", base: 12, wet: false },
-                { name: "Water", base: 375, wet: true },
-                { name: "Starter", base: 110, wet: true }
+            "Focaccia": [
+                { name: "Bread Flour", base: 398, wet: false },
+                { name: "AP Flour", base: 34, wet: false },
+                { name: "Spelt Flour", base: 22, wet: false },
+                { name: "Salt", base: 13, wet: false },
+                { name: "Yeast", base: 1.5, wet: false },
+                { name: "Water", base: 370, wet: true },
+                { name: "Starter (Levain)", base: 60, wet: true }
+            ],
+            "Seeded": [
+                { name: "Bread Flour", base: 360, wet: false },
+                { name: "Whole Wheat Flour", base: 90, wet: false },
+                { name: "Salt", base: 13, wet: false },
+                { name: "Flax", base: 25, wet: false },
+                { name: "Rolled Oats", base: 20, wet: false },
+                { name: "Pumpkin Seeds", base: 15, wet: false },
+                { name: "Sunflower Seeds", base: 30, wet: false },
+                { name: "Starter", base: 100, wet: true },
+                { name: "Water", base: 295, wet: true }
             ]
         };
 
@@ -579,26 +447,30 @@
                 { 
                     name: "Cranberry Walnut", 
                     ingredients: [
-                        { name: "Dried Cranberries", base: 100, wet: false },
-                        { name: "Walnuts", base: 100, wet: false }
-                    ]
-                },
-                { 
-                    name: "Cinnamon Raisin", 
-                    ingredients: [
-                        { name: "Raisins", base: 150, wet: false },
-                        { name: "Cinnamon", base: 8, wet: false }
+                        { name: "Cranberry", base: 90, wet: false },
+                        { name: "Walnut", base: 70, wet: false }
                     ]
                 },
                 { 
                     name: "Olive", 
                     ingredients: [
-                        { name: "Olives (chopped)", base: 120, wet: false }
+                        { name: "Olive", base: 90, wet: false }
+                    ]
+                },
+                { 
+                    name: "Raisin", 
+                    ingredients: [
+                        { name: "Raisin", base: 70, wet: false }
                     ]
                 }
             ],
             "Chocolate Brownies": [],
-            "Sourdough Baguette": []
+            "Focaccia": [],
+            "Seeded": []
+        };
+
+        const recipeNotes = {
+            "Chocolate Brownies": "1 = 18 brownies."
         };
 
         // State
@@ -607,8 +479,6 @@
         let currentUnit = "grams";
         let currentInclusion = "none";
         let isDarkMode = localStorage.getItem('darkMode') !== 'false';
-        let experiments = JSON.parse(localStorage.getItem('experiments') || '[]');
-        let isExperimentMode = false;
 
         // Elements
         const recipeSelect = document.getElementById('recipeSelect');
@@ -617,15 +487,9 @@
         const increaseBtn = document.getElementById('increaseBtn');
         const decreaseBtn = document.getElementById('decreaseBtn');
         const ingredientsSection = document.getElementById('ingredientsSection');
+        const recipeNote = document.getElementById('recipeNote');
         const themeToggle = document.getElementById('themeToggle');
         const unitRadios = document.querySelectorAll('input[name="unit"]');
-        const experimentToggle = document.getElementById('experimentToggle');
-        const experimentControls = document.getElementById('experimentControls');
-        const experimentName = document.getElementById('experimentName');
-        const experimentNotes = document.getElementById('experimentNotes');
-        const saveExperiment = document.getElementById('saveExperiment');
-        const clearExperiments = document.getElementById('clearExperiments');
-        const experimentsList = document.getElementById('experimentsList');
 
         // Initialize theme
         if (isDarkMode) {
@@ -707,11 +571,20 @@
             return grams / 453.592;
         }
 
+        // Convert grams to kilograms
+        function gramsToKg(grams) {
+            return grams / 1000;
+        }
+
         // Format number based on unit
         function formatAmount(grams) {
             if (currentUnit === 'lbs') {
                 const lbs = gramsToLbs(grams);
                 return `${lbs.toFixed(2)} lbs`;
+            }
+            if (currentUnit === 'kg') {
+                const kg = gramsToKg(grams);
+                return `${kg.toFixed(2)} kg`;
             }
             return `${Math.round(grams)} g`;
         }
@@ -824,126 +697,21 @@
             `;
 
             ingredientsSection.innerHTML = html;
+
+            const noteText = recipeNotes[currentRecipe];
+            if (noteText) {
+                recipeNote.textContent = noteText;
+                recipeNote.classList.remove('hidden');
+            } else {
+                recipeNote.textContent = '';
+                recipeNote.classList.add('hidden');
+            }
         }
 
-        // Experiment Mode Functions
-        experimentToggle.addEventListener('click', () => {
-            isExperimentMode = !isExperimentMode;
-            experimentControls.classList.toggle('active');
-            experimentToggle.textContent = isExperimentMode ? 'Close Experiment' : 'Start Experiment';
-        });
-
-        saveExperiment.addEventListener('click', () => {
-            const name = experimentName.value.trim();
-            const notes = experimentNotes.value.trim();
-            
-            if (!name) {
-                alert('Please enter an experiment name');
-                return;
-            }
-
-            const recipe = recipes[currentRecipe];
-            const selectedInclusion = getSelectedInclusion();
-            
-            // Capture current state
-            const experiment = {
-                id: Date.now(),
-                name: name,
-                notes: notes,
-                recipe: currentRecipe,
-                quantity: currentQuantity,
-                unit: currentUnit,
-                inclusion: currentInclusion,
-                timestamp: new Date().toISOString(),
-                ingredients: recipe.map(ing => ({
-                    name: ing.name,
-                    amount: ing.base * currentQuantity,
-                    wet: ing.wet
-                })),
-                totalFlour: calculateTotalFlour(),
-                totalWeight: recipe.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0) +
-                    (selectedInclusion ? selectedInclusion.ingredients.reduce((sum, ing) => sum + (ing.base * currentQuantity), 0) : 0)
-            };
-
-            if (selectedInclusion) {
-                experiment.inclusionIngredients = selectedInclusion.ingredients.map(ing => ({
-                    name: ing.name,
-                    amount: ing.base * currentQuantity
-                }));
-            }
-
-            experiments.push(experiment);
-            localStorage.setItem('experiments', JSON.stringify(experiments));
-            
-            // Clear inputs
-            experimentName.value = '';
-            experimentNotes.value = '';
-            
-            // Render experiments
-            renderExperiments();
-            
-            alert('Experiment saved! 🎉');
-        });
-
-        clearExperiments.addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear all experiments?')) {
-                experiments = [];
-                localStorage.setItem('experiments', JSON.stringify(experiments));
-                renderExperiments();
-            }
-        });
-
-        function renderExperiments() {
-            if (experiments.length === 0) {
-                experimentsList.innerHTML = '';
-                return;
-            }
-
-            let html = experiments.map(exp => {
-                const date = new Date(exp.timestamp);
-                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                return `
-                    <div class="experiment-item">
-                        <div class="experiment-item-header">
-                            <div>
-                                <div class="experiment-item-title">${exp.name}</div>
-                                <div class="experiment-item-date">${dateStr}</div>
-                            </div>
-                            <button class="experiment-item-delete" onclick="deleteExperiment(${exp.id})">✕</button>
-                        </div>
-                        <div class="experiment-item-details">
-                            <strong>Recipe:</strong> ${exp.recipe} (${exp.quantity} batch${exp.quantity > 1 ? 'es' : ''})<br>
-                            ${exp.inclusion !== 'none' ? `<strong>Inclusion:</strong> ${exp.inclusion}<br>` : ''}
-                            <strong>Total Flour:</strong> ${formatAmountFromValue(exp.totalFlour, exp.unit)}<br>
-                            <strong>Total Weight:</strong> ${formatAmountFromValue(exp.totalWeight, exp.unit)}
-                        </div>
-                        ${exp.notes ? `<div class="experiment-item-notes">Notes: ${exp.notes}</div>` : ''}
-                    </div>
-                `;
-            }).reverse().join('');
-
-            experimentsList.innerHTML = html;
-        }
-
-        function deleteExperiment(id) {
-            experiments = experiments.filter(exp => exp.id !== id);
-            localStorage.setItem('experiments', JSON.stringify(experiments));
-            renderExperiments();
-        }
-
-        function formatAmountFromValue(grams, unit) {
-            if (unit === 'lbs') {
-                const lbs = gramsToLbs(grams);
-                return `${lbs.toFixed(2)} lbs`;
-            }
-            return `${Math.round(grams)} g`;
-        }
 
         // Initial Render
         populateInclusionOptions();
         renderIngredients();
-        renderExperiments();
     </script>
 </body>
 </html>
